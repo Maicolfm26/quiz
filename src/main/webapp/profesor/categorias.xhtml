@@ -1,0 +1,94 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xml:lang="es" lang="es">
+
+<ui:composition template="../WEB-INF/templateProfesor.xhtml">
+    <ui:define name="title">Categorias</ui:define>
+    <ui:define name="content">
+        <section class="container">
+            <div class="row">
+                <h2 class="col">Listado de categorias</h2>
+                <p:commandButton style="margin-right: 16px;" value="Nueva categoria"
+                                 onclick="PF('crearCategoria').show();"/>
+                <p:dialog header="Crear categoria" showEffect="fade" widgetVar="crearCategoria"
+                          modal="true">
+                    <h:form id="form-crear">
+                        <p:messages for="msj-categoria" showDetail="true" closable="true">
+                            <p:autoUpdate/>
+                        </p:messages>
+
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="nombre" value="Nombre:"/>
+                            <p:inputText id="nombre" value="#{categoriaBean.categoria.nombre}" required="true"/>
+                            <p:message for="nombre"/>
+                        </h:panelGrid>
+                        <p:commandButton value="Crear categoria" action="#{categoriaBean.crearCategoria}"
+                                         update=":form-tabla form-crear" styleClass="mt-4" icon="pi pi-plus"
+                                         iconPos="left"/>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="editarCategoria" header="Editar categoria" showEffect="fade"
+                          widgetVar="editarCategoria"
+                          modal="true">
+                    <h:form id="form-editar">
+                        <p:growl id="msj-general" showDetail="true"/>
+                        <p:messages for="msj-categoria-editar" showDetail="true" closable="true">
+                            <p:autoUpdate/>
+                        </p:messages>
+
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="nombreEditar" value="Nombre:"/>
+                            <p:inputText id="nombreEditar" value="#{categoriaBean.categoriaSeleccionada.nombre}"
+                                         required="true"/>
+                            <p:message for="nombreEditar"/>
+                        </h:panelGrid>
+                        <p:commandButton value="Editar categoria" action="#{categoriaBean.editarCategoria}"
+                                         update=":form-tabla form-editar" styleClass="mt-4" icon="pi pi-pencil"
+                                         iconPos="left"/>
+                    </h:form>
+                </p:dialog>
+
+            </div>
+            <h:form id="form-tabla" styleClass="mt-5">
+                <p:dataView value="#{categoriaBean.listaCategorias}" var="categoria" rows="10"
+                            paginator="true"
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                    <p:dataViewListItem>
+                        <div class="row d-flex my-5">
+                            <div class="col-lg-8 col-md-1 align-self-center">
+                                <p:outputPanel>
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputText value="Nombre:"/>
+                                        <h:outputText value="#{categoria.nombre}" style="font-weight: bold"/>
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </div>
+                            <div class="col-lg-2 col-md-1 align-self-center">
+                                <p:growl for="msj-options" showDetail="true"/>
+                                <p:commandButton style="margin-bottom: 20px" value="Eliminar"
+                                                 styleClass="ui-button-danger"
+                                                 icon="pi pi-trash" iconPos="right"
+                                                 action="#{categoriaBean.eliminarCategoria(categoria)}" update="@form"/>
+                                <p:commandButton style="margin-right: 16px; margin-bottom: 20px" icon="pi pi-pencil" value="Editar"
+                                                 update=":editarCategoria"
+                                                 action="#{categoriaBean.seleccionarCategoria(categoria)}"/>
+                                <p:commandButton value="Preguntas"
+                                                 styleClass="ui-button-success"
+                                                 icon="pi pi-bars" iconPos="right"
+                                                 action="#{categoriaBean.irAEditar(categoria.idCategoria)}"/>
+                            </div>
+                        </div>
+                    </p:dataViewListItem>
+                </p:dataView>
+            </h:form>
+        </section>
+    </ui:define>
+</ui:composition>
+</html>
