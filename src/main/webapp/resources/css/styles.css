@@ -1,0 +1,42 @@
+body {
+    padding-bottom: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.btn-amarillo {
+    background-color: #ffd544;
+    border-color: #ffd544;
+    color: #ffffff;
+}
+
+.btn-amarillo:hover {
+    background-color: #f4c43c;
+    color: white;
+}
+
+.btn-cafe {
+    background-color: #b55e28;
+    border-color: #b55e28;
+    color: #ffffff;
+}
+
+.btn-cafe:hover {
+    background-color: #D05E28;
+    color: white;
+}
+
+.valida {
+    background-color: #54a90a !important;
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
+.invalida {
+    background-color: #F21515 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
