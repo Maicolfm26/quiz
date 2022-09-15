@@ -26,7 +26,7 @@
                         <p:toolbarGroup>
                             <p:commandButton value="Nueva" icon="pi pi-plus" actionListener="#{preguntaBean.openNew}"
                                              update=":form:manage-pregunta-content"
-                                             oncomplete="PF('managePreguntaDialog').show();$('textarea').trumbowyg();"
+                                             oncomplete="PF('managePreguntaDialog').initPosition();PF('managePreguntaDialog').show();$('textarea').trumbowyg();"
                                              styleClass="ui-button-success" style="margin-right: .5rem">
                                 <p:resetInput target=":form:manage-pregunta-content"/>
                             </p:commandButton>
@@ -67,13 +67,13 @@
 
                         <p:column selectionMode="multiple" exportable="false"></p:column>
 
-                        <p:column headerText="Name" sortBy="#{pregunta.descripcion}" filterBy="#{pregunta.descripcion}">
+                        <p:column headerText="Descripcion" sortBy="#{pregunta.descripcion}" filterBy="#{pregunta.descripcion}">
                             <h:outputText value="#{pregunta.descripcion}" escape="false"/>
                         </p:column>
-                        <p:column exportable="false">
+                        <p:column headerText="Opciones" exportable="false">
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-pregunta-content"
                                              action="#{preguntaBean.seleccionarPregunta(pregunta)}"
-                                             oncomplete="PF('managePreguntaDialog').show();$('textarea').trumbowyg();"
+                                             oncomplete="PF('managePreguntaDialog').initPosition();PF('managePreguntaDialog').show();$('textarea').trumbowyg();"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <p:resetInput target=":form:manage-pregunta-content"/>
                             </p:commandButton>
@@ -82,6 +82,10 @@
                                 <f:setPropertyActionListener value="#{pregunta}"
                                                              target="#{preguntaBean.selectedPregunta}"/>
                             </p:commandButton>
+                            <p:commandButton value="Respuestas"
+                                             styleClass="ui-button-danger"
+                                             icon="pi pi-bars" iconPos="right"
+                                             action="#{preguntaBean.ir_a_respuestas(pregunta.idPregunta)}"/>
                         </p:column>
 
                     </p:dataTable>

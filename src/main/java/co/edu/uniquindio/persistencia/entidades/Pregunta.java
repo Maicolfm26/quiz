@@ -30,7 +30,7 @@ public class Pregunta implements Serializable {
     @ManyToOne(optional = false)
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
     private List<Respuesta> listadoRespuestas;
 
     @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE})

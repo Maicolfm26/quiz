@@ -1,0 +1,150 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xml:lang="es" lang="es">
+<ui:composition template="../WEB-INF/templateProfesor.xhtml">
+    <ui:define name="recursos">
+        <h:outputStylesheet library="Trumbowyg-main" name="dist/ui/trumbowyg.min.css"/>
+        <h:outputScript library="Trumbowyg-main" name="dist/trumbowyg.min.js"/>
+        <h:outputScript library="js" name="iniciarEditor.js"/>
+    </ui:define>
+    <ui:define name="title">Respuestas</ui:define>
+    <ui:define name="content">
+        <section class="container">
+            <div class="border p-4 mb-3">
+                <h2 class="2">Pregunta:</h2>
+                <h:outputText value="#{respuestaBean.pregunta.descripcion}" escape="false"/>
+            </div>
+            <h:form id="form">
+                <h2 class="h2 mb-3">Respuestas</h2>
+                <div class="card crud-demo">
+                    <p:growl id="messages" showDetail="true"/>
+
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton value="Nueva" icon="pi pi-plus" actionListener="#{respuestaBean.openNew}"
+                                             update=":form:manage-respuesta-content"
+                                             oncomplete="PF('manageRespuestaDialog').initPosition();PF('manageRespuestaDialog').show();$('textarea').trumbowyg();"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":form:manage-respuesta-content"/>
+                            </p:commandButton>
+                            <p:commandButton id="delete-respuestas-button" value="#{respuestaBean.deleteButtonMessage}"
+                                             icon="pi pi-trash"
+                                             actionListener="#{respuestaBean.deleteSelectedRespuestas}"
+                                             styleClass="ui-button-danger"
+                                             disabled="#{!respuestaBean.hasSelectedRespuestas()}"
+                                             update="@this">
+                                <p:confirm header="Confirmación" message="¿Eliminar las respuestas seleccionadas?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+
+                    <p:dataTable id="dt-respuestas" widgetVar="dtRespuestas" var="respuesta"
+                                 value="#{respuestaBean.listadoRespuestas}"
+                                 reflow="true" styleClass="preguntas-table"
+                                 selection="#{respuestaBean.selectedRespuestas}" rowKey="#{respuesta.idRespuesta}"
+                                 paginator="true"
+                                 rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="respuestas-table-header">
+                                <span style="font-weight: bold">Respuestas</span>
+
+                                <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtRespuestas').filter()" placeholder="Buscar"/>
+                    </span>
+
+                            </div>
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" update=":form:delete-respuestas-button"/>
+                        <p:ajax event="rowUnselect" update=":form:delete-respuestas-button"/>
+                        <p:ajax event="rowSelectCheckbox" update=":form:delete-respuestas-button"/>
+                        <p:ajax event="rowUnselectCheckbox" update=":form:delete-respuestas-button"/>
+                        <p:ajax event="toggleSelect" update=":form:delete-respuestas-button"/>
+
+                        <p:column selectionMode="multiple" exportable="false"></p:column>
+
+                        <p:column headerText="Descripcion" sortBy="#{respuesta.descripcion}"
+                                  filterBy="#{respuesta.descripcion}">
+                            <h:outputText value="#{respuesta.descripcion}" escape="false"/>
+                        </p:column>
+                        <p:column headerText="Correcta" sortBy="#{respuesta.valida}">
+                            <h:outputText value="#{respuesta.valida}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" exportable="false">
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-respuesta-content"
+                                             action="#{respuestaBean.seleccionarRespuesta(respuesta)}"
+                                             oncomplete="PF('manageRespuestaDialog').initPosition();PF('manageRespuestaDialog').show();$('textarea').trumbowyg();"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <p:resetInput target=":form:manage-respuesta-content"/>
+                            </p:commandButton>
+                            <p:commandButton class="ui-button-warning rounded-button mx-3" icon="pi pi-trash"
+                                             process="@this"
+                                             oncomplete="PF('deleteRespuestaDialog').show()">
+                                <f:setPropertyActionListener value="#{respuesta}"
+                                                             target="#{respuestaBean.selectedRespuesta}"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:dialog header="Detalles de respuesta" showEffect="fade" modal="true"
+                              widgetVar="manageRespuestaDialog" responsive="true" height="350" position="250,25">
+                        <p:outputPanel id="manage-respuesta-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty respuestaBean.selectedRespuesta}">
+                                <div class="mt-2 mb-2" style="display: flex; align-items: center;">
+                                    <p style="display: inline; margin: 0">Valida:</p>
+                                    <p:toggleSwitch value="#{respuestaBean.selectedRespuesta.valida}"
+                                                    style="margin-left: 10px;" id="valida"/>
+                                </div>
+                                <h:panelGrid id="grid" columns="2" cellpadding="7">
+                                    <p:inputTextarea id="descripcion"
+                                                     value="#{respuestaBean.selectedRespuesta.descripcion}"
+                                                     required="true"/>
+                                    <p:messages for="descripcion" showDetail="true" closable="true">
+                                        <p:autoUpdate/>
+                                    </p:messages>
+                                </h:panelGrid>
+
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-check"
+                                             actionListener="#{respuestaBean.saveRespuesta}"
+                                             update="manage-respuesta-content" process="manage-respuesta-content @this"
+                                             oncomplete="$('textarea').trumbowyg();"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times"
+                                             onclick="PF('manageRespuestaDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
+
+                    <p:confirmDialog widgetVar="deleteRespuestaDialog" showEffect="fade" width="300"
+                                     message="¿Eliminar la respuesta?" header="Confirmar" severity="warn">
+                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{respuestaBean.deleteRespuesta}"
+                                         process="@this" oncomplete="PF('deleteRespuestaDialog').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteRespuestaDialog').hide()"/>
+                    </p:confirmDialog>
+
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"
+                                         icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </div>
+            </h:form>
+        </section>
+    </ui:define>
+</ui:composition>
+</html>

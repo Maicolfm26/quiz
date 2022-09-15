@@ -16,7 +16,7 @@
             <div class="row">
                 <h2 class="col">Listado de categorias</h2>
                 <p:commandButton style="margin-right: 16px;" value="Nueva categoria"
-                                 onclick="PF('crearCategoria').show();"/>
+                                 onclick="PF('crearCategoria').initPosition();PF('crearCategoria').show();"/>
                 <p:dialog header="Crear categoria" showEffect="fade" widgetVar="crearCategoria"
                           modal="true">
                     <h:form id="form-crear">

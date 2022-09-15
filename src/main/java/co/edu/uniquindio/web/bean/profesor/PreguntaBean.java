@@ -31,7 +31,7 @@ public class PreguntaBean implements Serializable {
 
     @Value("#{param['idCategoria']}")
     @Getter
-    private String codigoPreguntao;
+    private String codigoCategoria;
 
     @Getter
     private Categoria categoria;
@@ -50,9 +50,9 @@ public class PreguntaBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (codigoPreguntao != null && !codigoPreguntao.isEmpty()) {
+        if (codigoCategoria != null && !codigoCategoria.isEmpty()) {
             try {
-                categoria = categoriaServicio.obtenerCategoria(Integer.parseInt(codigoPreguntao));
+                categoria = categoriaServicio.obtenerCategoria(Integer.parseInt(codigoCategoria));
                 listadoPreguntas = categoria.getListadoPreguntas();
             } catch (Exception e) {
                 try {
@@ -137,4 +137,9 @@ public class PreguntaBean implements Serializable {
     public void seleccionarPregunta(Pregunta pregunta) {
         selectedPregunta = pregunta;
     }
+
+    public String ir_a_respuestas(String id) {
+        return "respuestas?faces-redirect=true&amp;idPregunta=" + id;
+    }
+
 }

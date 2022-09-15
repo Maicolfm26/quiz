@@ -20,9 +20,9 @@ public class Respuesta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int idRespuesta;
+    private Integer idRespuesta;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank
     private String descripcion;
 

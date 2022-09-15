@@ -78,7 +78,7 @@ public class CategoriaBean {
             categoriaServicio.editarCategoria(categoriaSeleccionada);
             categoriaSeleccionada = null;
             PrimeFaces current = PrimeFaces.current();
-            current.executeScript("PF('editarCategoria').hide();");
+            current.executeScript("PF('PF('editarCategoria').initPosition();PF('editarCategoria').show();");
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "Categoria actualizada"));
         } catch (Exception e) {
