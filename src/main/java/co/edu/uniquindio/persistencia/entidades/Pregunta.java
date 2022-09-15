@@ -2,6 +2,7 @@ package co.edu.uniquindio.persistencia.entidades;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class Pregunta implements Serializable {
 
     @Id
@@ -21,7 +23,7 @@ public class Pregunta implements Serializable {
     @EqualsAndHashCode.Include
     private Integer idPregunta;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank
     private String descripcion;
 
@@ -33,10 +35,6 @@ public class Pregunta implements Serializable {
 
     @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE})
     private List<Registro_Juego> listadoRegistros;
-
-    public Pregunta() {
-        listadoRespuestas = new ArrayList<>();
-    }
 
     public Pregunta(String descripcion, Categoria categoria) {
         this.descripcion = descripcion;
