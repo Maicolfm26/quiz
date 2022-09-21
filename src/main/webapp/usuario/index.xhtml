@@ -1,12 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Title</title>
-</head>
-<body>
-Hola mundo
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xml:lang="es" lang="es">
+<ui:composition template="../WEB-INF/template.xhtml">
+    <ui:define name="title">Inicio</ui:define>
+    <ui:define name="content">
+        <section class="container text-center">
+            <p:growl id="growl-general" showDetail="true"/>
+            <h1 class="display-1">Test computacional</h1>
+            <p class="lead mt-5">
+                Bienvenido al test de habilidades computacionales, a continuación encontraras diferentes preguntas con las cuales
+                se podrán poner a prueba tus conocimientos o habilidades con las tecnologías informáticas, durante todo el proceso de
+                prueba se encontrará con 6 preguntas de diferentes tipos y al final podrás ver tus resultados.<br/><br/>
+                Mucha suerte!!
+            </p>
+            <a href="/usuario/juego.xhtml" class="btn btn-lg btn-amarillo mt-2" type="submit">
+                Iniciar test
+            </a>
+        </section>
+    </ui:define>
+</ui:composition>
 </html>

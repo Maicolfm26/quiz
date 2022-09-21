@@ -1,0 +1,35 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xml:lang="es" lang="es">
+<ui:composition template="../WEB-INF/template.xhtml">
+    <ui:define name="title">Juego</ui:define>
+    <ui:define name="content">
+        <section class="container ">
+            <h:form id="form-juego">
+                <h1>Pregunta ##{juegoBean.numeroRonda+1}</h1>
+                <h:outputText value="#{juegoBean.preguntaActual.descripcion}" escape="false"/>
+
+                <p:selectOneRadio id="radioRespuesta" value="#{juegoBean.respuesta}" converter="#{respuestaConverter}"
+                                  layout="grid" columns="1" styleClass="grid-radio">
+                    <f:selectItems var="respuesta" itemLabel="#{respuesta.descripcion}" itemLabelEscaped="false"
+                                   value="#{juegoBean.preguntaActual.listadoRespuestas}"/>
+                </p:selectOneRadio>
+
+                <p:growl showDetail="true" for="msj-juego"/>
+                <p:commandButton id="butonSiguiente" styleClass="ui-button-warning"
+                                 style="width: 220px; height: 48px; color: #ffffff; font-size: 20px; font-family:-apple-system,BlinkMacSystemFont,'
+                     Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'; margin-top: 18px;"
+                                 value="#{juegoBean.textoBoton}" update="@form"
+                                 action="#{juegoBean.siguientePregunta}"/>
+            </h:form>
+        </section>
+    </ui:define>
+</ui:composition>
+</html>

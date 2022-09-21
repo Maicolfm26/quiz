@@ -3,6 +3,7 @@ package co.edu.uniquindio.web.filtros;
 import co.edu.uniquindio.web.bean.profesor.SeguridadProfesorBean;
 import co.edu.uniquindio.web.bean.usuario.SeguridadBean;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletRequest;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 public class SeguridadFilter implements Filter {
 
     public static final String PAGINA_INICIO = "/index.xhtml";
+    public static final String PAGINA_RESULTADOS = "/usuario/resultado.xhtml";
+    public static final String PAGINA_INICIO_USER = "/usuario/index.xhtml";
     public static final String PAGINA_INICIO_ADMIN = "/profesor/login.xhtml";
 
     @Override
@@ -58,6 +61,13 @@ public class SeguridadFilter implements Filter {
                         request.getSession().getAttribute("seguridadBean");
                 if (userManager != null) {
                     if (userManager.isAutenticado()) {
+                        if (requestURI.startsWith(PAGINA_INICIO_USER) && userManager.getUsuarioSesion().getJuego() != null) {
+                            //El usuario ya hizo el test
+                            response.sendRedirect(request.getContextPath() + PAGINA_RESULTADOS);
+                        } else if (requestURI.startsWith(PAGINA_RESULTADOS) && userManager.getUsuarioSesion().getJuego() == null) {
+                            //El usuario no ha hecho el test
+                            response.sendRedirect(request.getContextPath() + PAGINA_INICIO_USER);
+                        }
                         //El usuario está logueado entonces si puede ver la página solicitada
                         filterChain.doFilter(servletRequest, servletResponse);
                     } else {

@@ -17,9 +17,8 @@ public class Registro_Juego implements Serializable {
     private Registro_JuegoId id;
 
     @ManyToOne
-    @MapsId("usuario")
+    @MapsId("userName")
     private Juego juego;
-
 
     @ManyToOne
     @MapsId("idPregunta")
@@ -29,4 +28,10 @@ public class Registro_Juego implements Serializable {
     @ManyToOne(optional = false)
     private Respuesta respuesta;
 
+    public Registro_Juego(Juego juego, Pregunta pregunta, Respuesta respuesta) {
+        id = new Registro_JuegoId(juego.getUserName(), pregunta.getIdPregunta());
+        this.respuesta = respuesta;
+        this.juego = juego;
+        this.pregunta = pregunta;
+    }
 }

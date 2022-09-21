@@ -14,12 +14,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Juego implements Serializable {
-
-    @EmbeddedId
-    private JuegoId id;
-
-    @MapsId("userName")  //  maps the empid attribute of embedded id
+    @Id
+    @Column
     @EqualsAndHashCode.Include
+    private String userName;
+
+    @MapsId  //  maps the empid attribute of embedded id
     @OneToOne Usuario usuario;
 
     @Column(nullable = false)
@@ -30,7 +30,8 @@ public class Juego implements Serializable {
     private List<Registro_Juego> listadoRegistros;*/
 
     public Juego(Usuario usuario) {
-        this.usuario = usuario;
+        userName = usuario.getUserName();
         fecha = LocalDate.now();
+        this.usuario = usuario;
     }
 }

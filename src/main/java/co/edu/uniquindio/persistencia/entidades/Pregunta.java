@@ -30,7 +30,7 @@ public class Pregunta implements Serializable {
     @ManyToOne(optional = false)
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<Respuesta> listadoRespuestas;
 
     @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE})
@@ -40,4 +40,10 @@ public class Pregunta implements Serializable {
         this.descripcion = descripcion;
         this.categoria = categoria;
     }
+
+    public void eliminarRespuesta(Respuesta respuesta) {
+        listadoRespuestas.remove(respuesta);
+        System.out.println(listadoRespuestas);
+    }
+
 }

@@ -1,13 +1,16 @@
 package co.edu.uniquindio.persistencia.entidades;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Registro_JuegoId implements Serializable {
-    private Usuario usuario;
+    private String userName;
     private Integer idPregunta;
 }

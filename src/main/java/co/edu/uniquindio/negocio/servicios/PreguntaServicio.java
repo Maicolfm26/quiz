@@ -11,4 +11,6 @@ public interface PreguntaServicio {
 
     Pregunta agregarPregunta(Pregunta pregunta) throws Exception;
 
+    Pregunta obtenerPreguntaAleatoria(Categoria categoria);
+
 }

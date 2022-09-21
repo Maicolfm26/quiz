@@ -32,4 +32,12 @@ public class PreguntaServicioImpl implements PreguntaServicio {
     public Pregunta agregarPregunta(Pregunta pregunta) throws Exception {
         return preguntaRepo.save(pregunta);
     }
+
+    @Override
+    public Pregunta obtenerPreguntaAleatoria(Categoria categoria) {
+        List<Pregunta> preguntas = preguntaRepo.findByCategoria(categoria);
+        int numeroPreguntas = preguntas.size();
+        int indiceAleatorio = (int) (Math.random()*numeroPreguntas);
+        return preguntas.get(indiceAleatorio);
+    }
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xml:lang="es" lang="es">
+<ui:composition template="../WEB-INF/template.xhtml">
+    <ui:define name="title">Resultado</ui:define>
+    <ui:define name="content">
+        <section class="container">
+            <ui:repeat value="#{resultadoBean.listaRegistro_juegos}" var="registro_juego" varStatus="myVarStatus">
+                <div class="border mb-4 p-4">
+                    <h2>Pregunta #{myVarStatus.index+1}:</h2>
+                    <h:outputText value="#{registro_juego.pregunta.descripcion}" escape="false"/>
+                    <ui:repeat value="#{registro_juego.pregunta.listadoRespuestas}" var="respuesta">
+                        <div style="display: flex; align-items: center;" class="#{registro_juego.respuesta.idRespuesta == respuesta.idRespuesta ? (respuesta.valida ? 'valida' : 'invalida') : (respuesta.valida ? 'valida' : '')}">
+                            <i class="pi pi-circle-off"></i>
+                                <h:outputText value="#{respuesta.descripcion}" escape="false" />
+                        </div>
+                    </ui:repeat>
+
+                </div>
+            </ui:repeat>
+        </section>
+    </ui:define>
+</ui:composition>
+</html>
