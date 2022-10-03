@@ -4,12 +4,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * La clase Pregunta contendrá toda la información de una pregunta del test.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
 
 @Entity
 @Getter
@@ -36,14 +39,22 @@ public class Pregunta implements Serializable {
     @OneToMany(mappedBy = "pregunta", cascade = {CascadeType.REMOVE})
     private List<Registro_Juego> listadoRegistros;
 
+    /**
+     * Crea una pregunta con la descripción y categoría que le pasemos por parámetro.
+     * @param descripcion
+     * @param categoria
+     */
     public Pregunta(String descripcion, Categoria categoria) {
         this.descripcion = descripcion;
         this.categoria = categoria;
     }
 
+    /**
+     * Eliminamos la respuesta que le pasemos por parámetro que esta asociada a la pregunta.
+     * @param respuesta
+     */
     public void eliminarRespuesta(Respuesta respuesta) {
         listadoRespuestas.remove(respuesta);
-        System.out.println(listadoRespuestas);
     }
 
 }

@@ -1,17 +1,17 @@
 package co.edu.uniquindio.persistencia.entidades;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
+
+/**
+ * La clase Usuario representa un estudiante que resolvería el test.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
 
 @Entity
 @Getter
@@ -27,9 +27,4 @@ public class Usuario extends Persona implements Serializable {
 
     @OneToOne(mappedBy = "usuario")
     private Juego juego;
-
-    public Usuario(String userName, @NotBlank String clave, int edad) {
-        super(userName, clave);
-        this.edad = edad;
-    }
 }

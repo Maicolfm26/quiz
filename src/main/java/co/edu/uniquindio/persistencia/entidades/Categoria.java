@@ -4,13 +4,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
+
+/**
+ * Categoría representa un tipo de preguntas en el test.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
 
 @Entity
 @Getter
@@ -31,6 +33,10 @@ public class Categoria implements Serializable {
     @OneToMany(mappedBy = "categoria", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
     private List<Pregunta> listadoPreguntas;
 
+    /**
+     * Crea una categoría con el nombre especificado.
+     * @param nombre
+     */
     public Categoria(String nombre) {
         this.nombre = nombre;
     }

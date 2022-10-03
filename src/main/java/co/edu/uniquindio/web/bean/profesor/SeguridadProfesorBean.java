@@ -10,12 +10,21 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
+/**
+ * SeguridadProfesorBean es el encargado de controlar la vista de inicio de sesión.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @Scope("session")
 public class SeguridadProfesorBean implements Serializable {
 
     private final ProfesorServicio profesorServicio;
 
+    /**
+     * Crea una SeguridadProfesorBean con el profesorServicio recibido por parámetro.
+     * @param profesorServicio
+     */
     public SeguridadProfesorBean(ProfesorServicio profesorServicio) {
         this.profesorServicio = profesorServicio;
     }
@@ -33,6 +42,10 @@ public class SeguridadProfesorBean implements Serializable {
     @Getter @Setter
     private Profesor profesorSesion;
 
+    /**
+     * Verificamos el inicio de sesión del profesor y redireccionamos a la vista categorías.
+     * @return devuelve la redirección de vista.
+     */
     public String iniciarSesion() {
         try {
             profesorSesion = profesorServicio.iniciarSesion(userName, clave);
@@ -45,7 +58,10 @@ public class SeguridadProfesorBean implements Serializable {
         return null;
     }
 
-
+    /**
+     * Cerramos la sesión del profesor.
+     * @return redireccionamos al login del profesor.
+     */
     public String cerrarSesion() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/profesor/login?faces-redirect=true";

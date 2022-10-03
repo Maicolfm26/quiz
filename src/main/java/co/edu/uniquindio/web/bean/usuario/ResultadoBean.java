@@ -10,6 +10,11 @@ import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * ResultadoBean es el encargado de controlar la vista de resultados.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @ViewScoped
 public class ResultadoBean implements Serializable {
@@ -17,6 +22,11 @@ public class ResultadoBean implements Serializable {
     private final SeguridadBean seguridadBean;
     private final RegistroJuegoServicio registroJuegoServicio;
 
+    /**
+     * Crea un ResultadoBean con la seguridadBean y el registroJuegoServicio recibidos por parámetro.
+     * @param seguridadBean
+     * @param registroJuegoServicio
+     */
     public ResultadoBean(SeguridadBean seguridadBean, RegistroJuegoServicio registroJuegoServicio) {
         this.seguridadBean = seguridadBean;
         this.registroJuegoServicio = registroJuegoServicio;
@@ -26,6 +36,9 @@ public class ResultadoBean implements Serializable {
     @Setter
     private List<Registro_Juego> listaRegistro_juegos;
 
+    /**
+     * Después de construir el ResultadoBean cargamos todos los registro_juego del usuario que está en sesión.
+     */
     @PostConstruct
     public void init() {
         listaRegistro_juegos = registroJuegoServicio.obtenerRegistroJuegoPorUsuario(seguridadBean.getUsuarioSesion().getUserName());

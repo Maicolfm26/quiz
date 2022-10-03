@@ -12,6 +12,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.util.List;
 
+/**
+ * CategoriaBean es el encargado de controlar la vista de categorías.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @ViewScoped
 public class CategoriaBean {
@@ -26,7 +31,10 @@ public class CategoriaBean {
     @Setter
     private Categoria categoriaSeleccionada;
 
-
+    /**
+     * Crea una CategoriaBean con la categoriaServicio recibida por parámetro.
+     * @param categoriaServicio
+     */
     public CategoriaBean(CategoriaServicio categoriaServicio) {
         this.categoriaServicio = categoriaServicio;
     }
@@ -35,12 +43,19 @@ public class CategoriaBean {
     @Setter
     public List<Categoria> listaCategorias;
 
+    /**
+     * Después de construir la CategoriaBean cargamos el listado de categorías de la base de datos.
+     */
     @PostConstruct
     public void init() {
         listaCategorias = categoriaServicio.obtenerCategorias();
         categoria = new Categoria();
     }
 
+    /**
+     * Elimina una categoría.
+     * @param categoria
+     */
     public void eliminarCategoria(Categoria categoria) {
         try {
             categoriaServicio.eliminarCategoria(categoria.getIdCategoria());
@@ -54,6 +69,9 @@ public class CategoriaBean {
         }
     }
 
+    /**
+     * Crea una categoria.
+     */
     public void crearCategoria() {
         try {
             categoriaServicio.crearCategoria(categoria);
@@ -67,12 +85,19 @@ public class CategoriaBean {
         }
     }
 
+    /**
+     * Selecciona una categoría y muestra la ventana emergente para poderla editar.
+     * @param categoria
+     */
     public void seleccionarCategoria(Categoria categoria) {
         this.categoriaSeleccionada = categoria;
         PrimeFaces current = PrimeFaces.current();
         current.executeScript("PF('editarCategoria').show();");
     }
 
+    /**
+     * Edita una categoría.
+     */
     public void editarCategoria() {
         try {
             categoriaServicio.editarCategoria(categoriaSeleccionada);
@@ -87,6 +112,11 @@ public class CategoriaBean {
         }
     }
 
+    /**
+     * Nos redirecciona a la vista de preguntas que contiene la categoría.
+     * @param id
+     * @return redirecciona a la vista de preguntas.
+     */
     public String irAEditar(String id) {
         return "preguntas?faces-redirect=true&amp;idCategoria=" + id;
     }

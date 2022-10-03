@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * RespuestaBean es el encargado de controlar la vista de respuestas.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @ViewScoped
 public class RespuestaBean implements Serializable {
@@ -24,6 +29,11 @@ public class RespuestaBean implements Serializable {
     private final PreguntaServicio preguntaServicio;
     private final RespuestaServicio respuestaServicio;
 
+    /**
+     * Crea una RespuestaBean con la preguntaServicio y la respuestaServicio recibidas por parámetro.
+     * @param preguntaServicio
+     * @param respuestaServicio
+     */
     public RespuestaBean(PreguntaServicio preguntaServicio, RespuestaServicio respuestaServicio) {
         this.preguntaServicio = preguntaServicio;
         this.respuestaServicio = respuestaServicio;
@@ -48,6 +58,9 @@ public class RespuestaBean implements Serializable {
     @Setter
     private List<Respuesta> selectedRespuestas;
 
+    /**
+     * Despues de crear RespuestaBean miramos que exista la pregunta y cargamos las respuestas.
+     */
     @PostConstruct
     public void init() {
         if (codigoPregunta != null && !codigoPregunta.isEmpty()) {
@@ -68,11 +81,17 @@ public class RespuestaBean implements Serializable {
         }
     }
 
+    /**
+     * Crea un nuevo objeto para otra respuesta.
+     */
     public void openNew() {
         this.selectedRespuesta = new Respuesta();
         selectedRespuesta.setPregunta(pregunta);
     }
 
+    /**
+     * Crea una respuesta.
+     */
     public void saveRespuesta() {
         try {
             Integer idRespuesta = selectedRespuesta.getIdRespuesta();
@@ -91,6 +110,9 @@ public class RespuestaBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-respuestas");
     }
 
+    /**
+     * Borra una respuesta.
+     */
     public void deleteRespuesta() {
         try {
             respuestaServicio.eliminarRespuesta(selectedRespuesta.getIdRespuesta());
@@ -104,6 +126,10 @@ public class RespuestaBean implements Serializable {
         }
     }
 
+    /**
+     * Construimos el mensaje del botón de borrar respuestas.
+     * @return devuelve el mensaje que debe tener el botón de borrar respuestas.
+     */
     public String getDeleteButtonMessage() {
         if (hasSelectedRespuestas()) {
             int size = this.selectedRespuestas.size();
@@ -113,10 +139,17 @@ public class RespuestaBean implements Serializable {
         return "Eliminar";
     }
 
+    /**
+     * Obtenemos si hay respuestas seleccionadas.
+     * @return devuelve si hay respuestas seleccionadas.
+     */
     public boolean hasSelectedRespuestas() {
         return this.selectedRespuestas != null && !this.selectedRespuestas.isEmpty();
     }
 
+    /**
+     * Borra las respuestas seleccionadas.
+     */
     public void deleteSelectedRespuestas() {
         try {
             for (Respuesta respuesta : selectedRespuestas) {
@@ -134,6 +167,10 @@ public class RespuestaBean implements Serializable {
         }
     }
 
+    /**
+     * Selecciona una respuesta.
+     * @param respuesta
+     */
     public void seleccionarRespuesta(Respuesta respuesta) {
         selectedRespuesta = respuesta;
     }

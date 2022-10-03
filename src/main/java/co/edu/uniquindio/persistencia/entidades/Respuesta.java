@@ -4,11 +4,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
+
+/**
+ * La clase Respuesta contendrá toda la información de una opción de respuesta de una determinada pregunta.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
 
 @Entity
 @Getter
@@ -34,10 +38,4 @@ public class Respuesta implements Serializable {
 
     @OneToMany(mappedBy = "respuesta", cascade = {CascadeType.REMOVE})
     private List<Registro_Juego> listadoRegistros;
-
-    public Respuesta(String descripcion, boolean valida, Pregunta pregunta) {
-        this.descripcion = descripcion;
-        this.valida = valida;
-        this.pregunta = pregunta;
-    }
 }

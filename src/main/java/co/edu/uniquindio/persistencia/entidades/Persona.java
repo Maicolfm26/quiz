@@ -1,10 +1,14 @@
 package co.edu.uniquindio.persistencia.entidades;
 
 import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+
+/**
+ * Persona es una abstracción de usuario y profesor.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
 
 @Getter
 @Setter

@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * PreguntaBean es el encargado de controlar la vista de preguntas.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @ViewScoped
 public class PreguntaBean implements Serializable {
@@ -24,6 +29,11 @@ public class PreguntaBean implements Serializable {
     private final PreguntaServicio preguntaServicio;
     private final CategoriaServicio categoriaServicio;
 
+    /**
+     * Crea una PreguntaBean con la preguntaServicio y la CategoriaServicio recibidas por parámetro.
+     * @param preguntaServicio
+     * @param categoriaServicio
+     */
     public PreguntaBean(PreguntaServicio preguntaServicio, CategoriaServicio categoriaServicio) {
         this.preguntaServicio = preguntaServicio;
         this.categoriaServicio = categoriaServicio;
@@ -48,6 +58,9 @@ public class PreguntaBean implements Serializable {
     @Setter
     private List<Pregunta> selectedPreguntas;
 
+    /**
+     * Después de construir la PreguntaBean verificamos que la categoría si exista y cargamos las preguntas.
+     */
     @PostConstruct
     public void init() {
         if (codigoCategoria != null && !codigoCategoria.isEmpty()) {
@@ -68,11 +81,17 @@ public class PreguntaBean implements Serializable {
         }
     }
 
+    /**
+     * Crea un nuevo objeto para otra pregunta.
+     */
     public void openNew() {
         this.selectedPregunta = new Pregunta();
         selectedPregunta.setCategoria(categoria);
     }
 
+    /**
+     * Creamos una pregunta
+     */
     public void savePregunta() {
         try {
             Integer idPregunta = selectedPregunta.getIdPregunta();
@@ -91,6 +110,9 @@ public class PreguntaBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-preguntas");
     }
 
+    /**
+     * Eliminamos una pregunta
+     */
     public void deletePregunta() {
         try {
             preguntaServicio.eliminarPregunta(selectedPregunta.getIdPregunta());
@@ -104,6 +126,10 @@ public class PreguntaBean implements Serializable {
         }
     }
 
+    /**
+     * Construimos el mensaje del botón de borrar preguntas.
+     * @return devuelve el mensaje que debe tener el botón de borrar preguntas.
+     */
     public String getDeleteButtonMessage() {
         if (hasSelectedPreguntas()) {
             int size = this.selectedPreguntas.size();
@@ -113,10 +139,17 @@ public class PreguntaBean implements Serializable {
         return "Eliminar";
     }
 
+    /**
+     * Obtenemos si hay preguntas seleccionadas.
+     * @return devuelve si hay preguntas seleccionadas.
+     */
     public boolean hasSelectedPreguntas() {
         return this.selectedPreguntas != null && !this.selectedPreguntas.isEmpty();
     }
 
+    /**
+     * Borra las preguntas que hayan seleccionadas.
+     */
     public void deleteSelectedPreguntas() {
         try {
             for (Pregunta pregunta : selectedPreguntas) {
@@ -134,10 +167,19 @@ public class PreguntaBean implements Serializable {
         }
     }
 
+    /**
+     * selecciona una pregunta
+     * @param pregunta
+     */
     public void seleccionarPregunta(Pregunta pregunta) {
         selectedPregunta = pregunta;
     }
 
+    /**
+     * Nos redirecciona a la vista donde se encuentran las respuestas de la pregunta.
+     * @param id
+     * @return devuelve la vista de las respuestas de la pregunta
+     */
     public String ir_a_respuestas(String id) {
         return "respuestas?faces-redirect=true&amp;idPregunta=" + id;
     }

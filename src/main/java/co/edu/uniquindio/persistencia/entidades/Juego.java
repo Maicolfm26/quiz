@@ -8,6 +8,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Juego representa que un usuario determinado ha resuelto el test.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Entity
 @Getter
 @Setter
@@ -19,16 +24,16 @@ public class Juego implements Serializable {
     @EqualsAndHashCode.Include
     private String userName;
 
-    @MapsId  //  maps the empid attribute of embedded id
+    @MapsId
     @OneToOne Usuario usuario;
 
     @Column(nullable = false)
     private LocalDate fecha;
 
-   /* @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = )
-    private List<Registro_Juego> listadoRegistros;*/
-
+    /**
+     * Crea un juego para el usuario especificado y añade la hora actual.
+     * @param usuario
+     */
     public Juego(Usuario usuario) {
         userName = usuario.getUserName();
         fecha = LocalDate.now();

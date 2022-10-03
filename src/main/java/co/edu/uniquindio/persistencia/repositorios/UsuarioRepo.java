@@ -4,6 +4,11 @@ import co.edu.uniquindio.persistencia.entidades.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * UsuarioRepo está encargado de hacer las consultas a la base de datos de la tabla usuario.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Repository
 public interface UsuarioRepo extends JpaRepository<Usuario, String> {
 }

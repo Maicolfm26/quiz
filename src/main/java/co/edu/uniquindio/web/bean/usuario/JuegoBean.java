@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * JuegoBean es el encargado de controlar la vista del juego.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @ViewScoped
 public class JuegoBean implements Serializable {
@@ -26,6 +31,14 @@ public class JuegoBean implements Serializable {
     private final JuegoServicio juegoServicio;
     private final RegistroJuegoServicio registroJuegoServicio;
 
+    /**
+     * Crea un JuegoBean con la categoriaServicio, la preguntaServicio, la seguridadBean, el juegoServicio y el registroJuegoServicio recibidos por parámetro.
+     * @param categoriaServicio
+     * @param preguntaServicio
+     * @param seguridadBean
+     * @param juegoServicio
+     * @param registroJuegoServicio
+     */
     public JuegoBean(CategoriaServicio categoriaServicio, PreguntaServicio preguntaServicio, SeguridadBean seguridadBean, JuegoServicio juegoServicio, RegistroJuegoServicio registroJuegoServicio) {
         this.categoriaServicio = categoriaServicio;
         this.preguntaServicio = preguntaServicio;
@@ -60,6 +73,10 @@ public class JuegoBean implements Serializable {
 
     private Juego juego;
 
+    /**
+     * Después de construir el JuegoBean cargamos las categorías y seleccionamos una pregunta aleatoria de la primera categoría.
+     * @return redireccionamos a la vista juego.
+     */
     @PostConstruct
     public String iniciarJuego() {
         numeroRonda = 0;
@@ -89,6 +106,10 @@ public class JuegoBean implements Serializable {
         return "juego?faces-redirect=true";
     }
 
+    /**
+     * Cargamos la siguiente pregunta y guardamos el registro de la pregunta resuelta.
+     * @return redireccionamos a la vista resultados si es la última pregunta.
+     */
     public String siguientePregunta() {
         if (respuesta != null) {
             Registro_Juego registro_juego = new Registro_Juego(juego, preguntaActual, respuesta);

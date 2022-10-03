@@ -11,7 +11,7 @@
     <groupId>co.edu.uniquindio</groupId>
     <artifactId>proyecto-analisis</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>proyecto-analisis</name>
     <description>proyecto-analisis</description>
     <properties>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <version>1.18.22</version>
         </dependency>
         <dependency>
             <groupId>org.jasypt</groupId>
@@ -79,6 +79,13 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

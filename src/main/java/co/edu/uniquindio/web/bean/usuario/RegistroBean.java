@@ -10,6 +10,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 
+/**
+ * RegistroBean es el encargado de controlar la vista de registro.
+ * @author Michael Alexander Florez Muñoz, Gustavo Adolfo Gutierrez Londoño, Juan Camilo Jaramillo De La Torre
+ */
+
 @Component
 @ViewScoped
 public class RegistroBean implements Serializable {
@@ -20,11 +25,18 @@ public class RegistroBean implements Serializable {
 
     private final UsuarioServicio usuarioServicio;
 
+    /**
+     * Crea un RegistroBean con el usuarioServicio recibido por parámetro.
+     * @param usuarioServicio
+     */
     public RegistroBean(UsuarioServicio usuarioServicio) {
         this.usuarioServicio = usuarioServicio;
         usuario = new Usuario();
     }
 
+    /**
+     * Crea un usuario.
+     */
     public void registrarUsuario() {
         try {
             usuarioServicio.registrarUsuario(usuario);
