@@ -38,5 +38,6 @@ public class Juego implements Serializable {
         userName = usuario.getUserName();
         fecha = LocalDate.now();
         this.usuario = usuario;
+
     }
 }

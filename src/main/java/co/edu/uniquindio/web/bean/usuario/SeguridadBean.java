@@ -6,8 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 /**
@@ -63,7 +68,15 @@ public class SeguridadBean implements Serializable {
      * @return redireccionamos al login del estudiante.
      */
     public String cerrarSesion() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "/index?faces-redirect=true";
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpSession session = request.getSession();
+        JuegoBean juegoBean = (JuegoBean) session.getAttribute("juegoBean");
+        if(juegoBean == null || juegoBean.isTermino()) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            return "/index?faces-redirect=true";
+        }
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Alerta", "Primero debes de terminar el test");
+        FacesContext.getCurrentInstance().addMessage("msj-bean", msg);
+        return null;
     }
 }

@@ -7,13 +7,19 @@ import co.edu.uniquindio.negocio.servicios.RegistroJuegoServicio;
 import co.edu.uniquindio.persistencia.entidades.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +28,7 @@ import java.util.List;
  */
 
 @Component
-@ViewScoped
+@Scope("session")
 public class JuegoBean implements Serializable {
 
     private final CategoriaServicio categoriaServicio;
@@ -45,6 +51,8 @@ public class JuegoBean implements Serializable {
         this.seguridadBean = seguridadBean;
         this.juegoServicio = juegoServicio;
         this.registroJuegoServicio = registroJuegoServicio;
+        listado_registro_juego = new ArrayList<>();
+        termino = seguridadBean.getUsuarioSesion().getJuego() != null;
     }
 
     @Getter
@@ -68,10 +76,16 @@ public class JuegoBean implements Serializable {
     private Respuesta respuesta;
 
     @Getter
+    private boolean termino;
+
+    @Getter
     @Setter
     private String textoBoton = "Siguiente pregunta";
 
     private Juego juego;
+    private List<Registro_Juego> listado_registro_juego;
+
+    private long startTime;
 
     /**
      * Después de construir el JuegoBean cargamos las categorías y seleccionamos una pregunta aleatoria de la primera categoría.
@@ -96,13 +110,7 @@ public class JuegoBean implements Serializable {
             textoBoton = "Terminar";
         }
         juego = new Juego(seguridadBean.getUsuarioSesion());
-        try {
-            juego = juegoServicio.guardarJuego(juego);
-            seguridadBean.getUsuarioSesion().setJuego(juego);
-        } catch (Exception e) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Alerta", e.getMessage());
-            FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
-        }
+        startTime = System.currentTimeMillis();
         return "juego?faces-redirect=true";
     }
 
@@ -112,13 +120,9 @@ public class JuegoBean implements Serializable {
      */
     public String siguientePregunta() {
         if (respuesta != null) {
-            Registro_Juego registro_juego = new Registro_Juego(juego, preguntaActual, respuesta);
-            try {
-                registroJuegoServicio.guardarRespuesta(registro_juego);
-            } catch (Exception e) {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Alerta", e.getMessage());
-                FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
-            }
+            long endTime = System.currentTimeMillis() - startTime;
+            Registro_Juego registro_juego = new Registro_Juego(juego, preguntaActual, respuesta, (int) endTime/1000);
+            listado_registro_juego.add(registro_juego);
             if (respuesta.isValida()) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "Respuesta correcta");
                 FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
@@ -133,11 +137,20 @@ public class JuegoBean implements Serializable {
                 preguntaActual = preguntaServicio.obtenerPreguntaAleatoria(categoriaActual);
                 respuesta = null;
             } else {
+                try {
+                    juego = juegoServicio.guardarJuego(juego, listado_registro_juego);
+                    seguridadBean.getUsuarioSesion().setJuego(juego);
+                } catch (Exception e) {
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Alerta", e.getMessage());
+                    FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
+                }
+                termino = true;
                 return "resultado?faces-redirect=true";
             }
             if (numeroRonda == listadoCategorias.size() - 1) {
                 textoBoton = "Terminar";
             }
+            startTime = System.currentTimeMillis();
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Alerta", "Debes de seleccionar una respuesta");
             FacesContext.getCurrentInstance().addMessage("msj-juego", msg);

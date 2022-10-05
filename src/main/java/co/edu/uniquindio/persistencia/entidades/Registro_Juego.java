@@ -32,16 +32,20 @@ public class Registro_Juego implements Serializable {
     @ManyToOne(optional = false)
     private Respuesta respuesta;
 
+    @Column(nullable = false)
+    private int segundos;
+
     /**
      * Crea un registro de un determinado juego para un usuario y pregunta concreta.
      * @param juego
      * @param pregunta
      * @param respuesta
      */
-    public Registro_Juego(Juego juego, Pregunta pregunta, Respuesta respuesta) {
+    public Registro_Juego(Juego juego, Pregunta pregunta, Respuesta respuesta, int segundos) {
         id = new Registro_JuegoId(juego.getUserName(), pregunta.getIdPregunta());
         this.respuesta = respuesta;
         this.juego = juego;
         this.pregunta = pregunta;
+        this.segundos = segundos;
     }
 }

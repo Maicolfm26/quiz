@@ -1,6 +1,7 @@
 package co.edu.uniquindio.web.filtros;
 
 import co.edu.uniquindio.web.bean.profesor.SeguridadProfesorBean;
+import co.edu.uniquindio.web.bean.usuario.JuegoBean;
 import co.edu.uniquindio.web.bean.usuario.SeguridadBean;
 import org.springframework.stereotype.Component;
 import javax.servlet.Filter;
@@ -20,6 +21,7 @@ public class SeguridadFilter implements Filter {
 
     public static final String PAGINA_INICIO = "/index.xhtml";
     public static final String PAGINA_RESULTADOS = "/usuario/resultado.xhtml";
+    public static final String PAGINA_JUEGO = "/usuario/juego.xhtml";
     public static final String PAGINA_INICIO_USER = "/usuario/index.xhtml";
     public static final String PAGINA_INICIO_ADMIN = "/profesor/login.xhtml";
 
@@ -69,14 +71,22 @@ public class SeguridadFilter implements Filter {
                 //Obtenemos el objeto seguridadBean de la sesión actual
                 SeguridadBean userManager = (SeguridadBean)
                         request.getSession().getAttribute("seguridadBean");
+                //Obtenemos el objeto juegoBean de la sesión actual
+                JuegoBean juegoBean = (JuegoBean)
+                        request.getSession().getAttribute("juegoBean");
                 if (userManager != null) {
                     if (userManager.isAutenticado()) {
-                        if (requestURI.startsWith(PAGINA_INICIO_USER) && userManager.getUsuarioSesion().getJuego() != null) {
+                        if ((requestURI.startsWith(PAGINA_INICIO_USER) || requestURI.startsWith(PAGINA_JUEGO)) && userManager.getUsuarioSesion().getJuego() != null) {
                             //El usuario ya hizo el test
                             response.sendRedirect(request.getContextPath() + PAGINA_RESULTADOS);
                         } else if (requestURI.startsWith(PAGINA_RESULTADOS) && userManager.getUsuarioSesion().getJuego() == null) {
                             //El usuario no ha hecho el test
                             response.sendRedirect(request.getContextPath() + PAGINA_INICIO_USER);
+                        } else if ((requestURI.startsWith(PAGINA_INICIO_USER) || requestURI.startsWith(PAGINA_RESULTADOS)) && juegoBean != null) {
+                            if(!juegoBean.isTermino()) {
+                                //El usuario no ha terminado el juego, entonces se redirecciona al juego
+                                response.sendRedirect(request.getContextPath() + PAGINA_JUEGO);
+                            }
                         }
                         //El usuario está logueado entonces si puede ver la página solicitada
                         filterChain.doFilter(servletRequest, servletResponse);

@@ -22,9 +22,10 @@
                                                                  src="/resources/img/quiz-logo.png" alt="logo"
                                                                  width="30"/>Quiz</a>
         <h:form class="col" style="padding: 0px;">
+            <p:growl showDetail="true" for="msj-bean"/>
             <p:commandButton styleClass="ui-button-warning float-right" style="color: #ffffff; font-family:-apple-system,BlinkMacSystemFont,'
                      Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';"
-                             value="Cerrar sesión" action="#{seguridadBean.cerrarSesion}"/>
+                             value="Cerrar sesión" action="#{seguridadBean.cerrarSesion}" update="@form"/>
         </h:form>
     </nav>
     <article class="contenido mb-5">
