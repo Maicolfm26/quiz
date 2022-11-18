@@ -4,6 +4,7 @@ import co.edu.uniquindio.negocio.servicios.PreguntaServicio;
 import co.edu.uniquindio.persistencia.entidades.Categoria;
 import co.edu.uniquindio.persistencia.entidades.Pregunta;
 import co.edu.uniquindio.persistencia.repositorios.PreguntaRepo;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -69,5 +70,24 @@ public class PreguntaServicioImpl implements PreguntaServicio {
         int numeroPreguntas = preguntas.size();
         int indiceAleatorio = (int) (Math.random()*numeroPreguntas);
         return preguntas.get(indiceAleatorio);
+    }
+
+    /**
+     * Consulta la cantidad de preguntas que hay en la base de datos
+     * @return devuelve la cantidad de preguntas
+     */
+    @Override
+    public int obtenerCantidad() {
+        return (int) preguntaRepo.count();
+    }
+
+    /**
+     * Calibra las preguntas de acuerdo a la cantidad de usuarios que la resuelto bien y el numero de segundos que tardaron.
+     * @param pageable
+     * @return devuelve listado de preguntas por el nivel
+     */
+    @Override
+    public List<Pregunta> obtenerPreguntasPorNivel(Pageable pageable) {
+        return preguntaRepo.getPreguntasByNivel(pageable);
     }
 }

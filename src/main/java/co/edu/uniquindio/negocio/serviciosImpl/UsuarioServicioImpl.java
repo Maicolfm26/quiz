@@ -62,4 +62,14 @@ public class UsuarioServicioImpl implements UsuarioServicio {
             throw new Exception("Los datos de autenticacion son incorrectos");
         }
     }
+
+    /**
+     * Actualiza el usuario especificado por parametro.
+     * @param usuario
+     * @throws Exception
+     */
+    @Override
+    public void actualizarUsuario(Usuario usuario) throws Exception {
+        usuarioRepo.save(usuario);
+    }
 }

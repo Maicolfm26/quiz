@@ -27,4 +27,21 @@ public class Usuario extends Persona implements Serializable {
 
     @OneToOne(mappedBy = "usuario")
     private Juego juego;
+
+    @Column
+    private Double nivel;
+
+    /**
+     * Obtiene el nivel del usuario por el promedio que haya obtenido.
+     * @return retorna el nivel del usuario.
+     */
+    public String getNivel() {
+        String nivel = "Avanzado";
+        if(this.nivel >= 1.0 && this.nivel < 2.0) {
+            nivel = "Bajo";
+        } else if(this.nivel < 4.0) {
+            nivel = "Medio";
+        }
+        return nivel;
+    }
 }

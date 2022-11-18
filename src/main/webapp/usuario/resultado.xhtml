@@ -12,9 +12,14 @@
     <ui:define name="title">Resultado</ui:define>
     <ui:define name="content">
         <section class="container">
+            <h1 class="mb-4 text-center">Su nivel en conocimientos computacionales es #{seguridadBean.usuarioSesion.nivel}</h1>
             <ui:repeat value="#{resultadoBean.listaRegistro_juegos}" var="registro_juego" varStatus="myVarStatus">
                 <div class="border mb-4 p-4">
-                    <h2>Pregunta #{myVarStatus.index+1}:</h2>
+                        <div class="row row-cols-2">
+                            <div class="col" style="font-size: 35px;">Pregunta #{myVarStatus.index+1}</div>
+                            <div class="col text-lg-right" style="font-size: 20px;">Nivel #{registro_juego.nivel}</div>
+                        </div>
+                    <h2></h2>
                     <h:outputText value="#{registro_juego.pregunta.descripcion}" escape="false"/>
                     <ui:repeat value="#{registro_juego.pregunta.listadoRespuestas}" var="respuesta">
                         <div style="display: flex; align-items: center;" class="#{registro_juego.respuesta.idRespuesta == respuesta.idRespuesta ? (respuesta.valida ? 'valida' : 'invalida') : (respuesta.valida ? 'valida' : '')}">

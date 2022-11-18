@@ -19,6 +19,6 @@ public interface RegistroJuegoRepo extends JpaRepository<Registro_Juego, Registr
      * @param user_name
      * @return devuelve todos los registros de juego asociados al usuario.
      */
-    @Query("select r from Registro_Juego r where r.id.userName = :user_name")
+    @Query("select r from Registro_Juego r where r.id.userName = :user_name order by r.numeroPregunta")
     List<Registro_Juego> obtenerRegistroJuegoPorUsuario(String user_name);
 }

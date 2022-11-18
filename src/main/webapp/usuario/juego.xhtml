@@ -13,13 +13,18 @@
     <ui:define name="content">
         <section class="container ">
             <h:form id="form-juego">
-                <h1>Pregunta ##{juegoBean.numeroRonda+1}</h1>
-                <h:outputText value="#{juegoBean.preguntaActual.descripcion}" escape="false"/>
+                <div class="container mb-3">
+                    <div class="row row-cols-2">
+                        <div class="col pl-0" style="font-size: 35px;">Pregunta #{juegoBean.algoritmoAdaptativo.preguntasResueltas}</div>
+                        <div class="col text-lg-right" style="font-size: 20px;">Nivel #{juegoBean.algoritmoAdaptativo.nivelPregunta}</div>
+                    </div>
+                </div>
+                <h:outputText value="#{juegoBean.algoritmoAdaptativo.preguntaActual.descripcion}" escape="false"/>
 
                 <p:selectOneRadio id="radioRespuesta" value="#{juegoBean.respuesta}" converter="#{respuestaConverter}"
                                   layout="grid" columns="1" styleClass="grid-radio">
                     <f:selectItems var="respuesta" itemLabel="#{respuesta.descripcion}" itemLabelEscaped="false"
-                                   value="#{juegoBean.preguntaActual.listadoRespuestas}"/>
+                                   value="#{juegoBean.algoritmoAdaptativo.preguntaActual.listadoRespuestas}"/>
                 </p:selectOneRadio>
 
                 <p:growl showDetail="true" for="msj-juego"/>

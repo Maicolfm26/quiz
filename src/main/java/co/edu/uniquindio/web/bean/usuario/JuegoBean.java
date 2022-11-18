@@ -1,22 +1,15 @@
 package co.edu.uniquindio.web.bean.usuario;
 
-import co.edu.uniquindio.negocio.servicios.CategoriaServicio;
 import co.edu.uniquindio.negocio.servicios.JuegoServicio;
-import co.edu.uniquindio.negocio.servicios.PreguntaServicio;
-import co.edu.uniquindio.negocio.servicios.RegistroJuegoServicio;
+import co.edu.uniquindio.negocio.servicios.UsuarioServicio;
 import co.edu.uniquindio.persistencia.entidades.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,45 +24,26 @@ import java.util.List;
 @Scope("session")
 public class JuegoBean implements Serializable {
 
-    private final CategoriaServicio categoriaServicio;
-    private final PreguntaServicio preguntaServicio;
     private final SeguridadBean seguridadBean;
     private final JuegoServicio juegoServicio;
-    private final RegistroJuegoServicio registroJuegoServicio;
-
+    private final UsuarioServicio usuarioServicio;
+    @Getter
+    private final AlgoritmoAdaptativo algoritmoAdaptativo;
     /**
-     * Crea un JuegoBean con la categoriaServicio, la preguntaServicio, la seguridadBean, el juegoServicio y el registroJuegoServicio recibidos por parámetro.
-     * @param categoriaServicio
-     * @param preguntaServicio
+     * Crea un JuegoBean con la seguridadBean, el juegoServicio y el algoritmo adaptativo recibidos por parámetro.
      * @param seguridadBean
      * @param juegoServicio
-     * @param registroJuegoServicio
+     * @param usuarioServicio
+     * @param algoritmoAdaptativo
      */
-    public JuegoBean(CategoriaServicio categoriaServicio, PreguntaServicio preguntaServicio, SeguridadBean seguridadBean, JuegoServicio juegoServicio, RegistroJuegoServicio registroJuegoServicio) {
-        this.categoriaServicio = categoriaServicio;
-        this.preguntaServicio = preguntaServicio;
+    public JuegoBean(SeguridadBean seguridadBean, JuegoServicio juegoServicio, UsuarioServicio usuarioServicio, AlgoritmoAdaptativo algoritmoAdaptativo) {
         this.seguridadBean = seguridadBean;
         this.juegoServicio = juegoServicio;
-        this.registroJuegoServicio = registroJuegoServicio;
+        this.usuarioServicio = usuarioServicio;
+        this.algoritmoAdaptativo = algoritmoAdaptativo;
         listado_registro_juego = new ArrayList<>();
         termino = seguridadBean.getUsuarioSesion().getJuego() != null;
     }
-
-    @Getter
-    @Setter
-    private int numeroRonda;
-
-    @Getter
-    @Setter
-    private List<Categoria> listadoCategorias;
-
-    @Getter
-    @Setter
-    private Pregunta preguntaActual;
-
-    @Getter
-    @Setter
-    private Categoria categoriaActual;
 
     @Getter
     @Setter
@@ -93,20 +67,15 @@ public class JuegoBean implements Serializable {
      */
     @PostConstruct
     public String iniciarJuego() {
-        numeroRonda = 0;
-        listadoCategorias = categoriaServicio.obtenerCategorias();
-        if (listadoCategorias.size() == 0) {
+        if (algoritmoAdaptativo.getNumeroPreguntasPorNivel() == 0) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/usuario/index.xhtml");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            categoriaActual = listadoCategorias.get(numeroRonda);
-            preguntaActual = preguntaServicio.obtenerPreguntaAleatoria(categoriaActual);
         }
 
-        if (numeroRonda == listadoCategorias.size() - 1) {
+        if (algoritmoAdaptativo.isLastQuestion()) {
             textoBoton = "Terminar";
         }
         juego = new Juego(seguridadBean.getUsuarioSesion());
@@ -121,9 +90,10 @@ public class JuegoBean implements Serializable {
     public String siguientePregunta() {
         if (respuesta != null) {
             long endTime = System.currentTimeMillis() - startTime;
-            Registro_Juego registro_juego = new Registro_Juego(juego, preguntaActual, respuesta, (int) endTime/1000);
+            Registro_Juego registro_juego = new Registro_Juego(juego, algoritmoAdaptativo.getPreguntaActual(), respuesta, (int) endTime/1000, algoritmoAdaptativo.getNivelPregunta(), algoritmoAdaptativo.getPreguntasResueltas());
             listado_registro_juego.add(registro_juego);
-            if (respuesta.isValida()) {
+            boolean respuestaValida = respuesta.isValida();
+            if (respuestaValida) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "Respuesta correcta");
                 FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
             } else {
@@ -131,15 +101,18 @@ public class JuegoBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
             }
 
-            numeroRonda++;
-            if (numeroRonda < listadoCategorias.size()) {
-                categoriaActual = listadoCategorias.get(numeroRonda);
-                preguntaActual = preguntaServicio.obtenerPreguntaAleatoria(categoriaActual);
+            algoritmoAdaptativo.calcularNivelPersona(respuestaValida);
+            algoritmoAdaptativo.calcularProbabilidad();
+
+            if (!algoritmoAdaptativo.isLastQuestion()) {
+                algoritmoAdaptativo.siguientePregunta();
                 respuesta = null;
             } else {
                 try {
                     juego = juegoServicio.guardarJuego(juego, listado_registro_juego);
                     seguridadBean.getUsuarioSesion().setJuego(juego);
+                    seguridadBean.getUsuarioSesion().setNivel(algoritmoAdaptativo.getNivelPersona());
+                    usuarioServicio.actualizarUsuario(seguridadBean.getUsuarioSesion());
                 } catch (Exception e) {
                     FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Alerta", e.getMessage());
                     FacesContext.getCurrentInstance().addMessage("msj-juego", msg);
@@ -147,7 +120,7 @@ public class JuegoBean implements Serializable {
                 termino = true;
                 return "resultado?faces-redirect=true";
             }
-            if (numeroRonda == listadoCategorias.size() - 1) {
+            if (algoritmoAdaptativo.isLastQuestion()) {
                 textoBoton = "Terminar";
             }
             startTime = System.currentTimeMillis();

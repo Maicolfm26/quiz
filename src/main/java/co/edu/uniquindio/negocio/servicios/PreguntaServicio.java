@@ -2,6 +2,9 @@ package co.edu.uniquindio.negocio.servicios;
 
 import co.edu.uniquindio.persistencia.entidades.Categoria;
 import co.edu.uniquindio.persistencia.entidades.Pregunta;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * PreguntaServicio define los servicios que se deben implementar para la entidad Pregunta.
@@ -39,5 +42,18 @@ public interface PreguntaServicio {
      * @return devuelve la pregunta escogida de forma aleatoria.
      */
     Pregunta obtenerPreguntaAleatoria(Categoria categoria);
+
+    /**
+    * Consulta la cantidad de preguntas que hay en la base de datos
+    * @return devuelve la cantidad de preguntas
+    */
+    int obtenerCantidad();
+
+    /**
+     * Calibra las preguntas de acuerdo a la cantidad de usuarios que la resuelto bien y el numero de segundos que tardaron.
+     * @param pageable
+     * @return devuelve listado de preguntas por el nivel
+     */
+    List<Pregunta> obtenerPreguntasPorNivel(Pageable pageable);
 
 }

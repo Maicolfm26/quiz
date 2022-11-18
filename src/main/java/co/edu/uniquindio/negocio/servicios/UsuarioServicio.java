@@ -25,4 +25,11 @@ public interface UsuarioServicio {
      * @throws Exception
      */
     Usuario iniciarSesion(String userName, String clave) throws Exception;
+
+    /**
+     * Actualiza el usuario especificado por parametro
+     * @param usuario
+     * @throws Exception
+     */
+    void actualizarUsuario(Usuario usuario) throws Exception;
 }
