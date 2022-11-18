@@ -3,6 +3,7 @@ package co.edu.uniquindio.web.bean.usuario;
 import co.edu.uniquindio.negocio.servicios.PreguntaServicio;
 import co.edu.uniquindio.persistencia.entidades.Pregunta;
 import lombok.Getter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.List;
  */
 
 @Component
+@Scope("session")
 public class AlgoritmoAdaptativo {
 
     private int numeroPreguntas;
